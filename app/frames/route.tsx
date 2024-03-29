@@ -6,7 +6,7 @@ const handleRequest = frames(async (ctx) => {
   return {
     image: (
       <>
-        <div>hello</div>
+        <div>🚩</div>
         <div>
           {ctx.pressedButton
             ? `I clicked ${ctx.searchParams.value}`
@@ -15,10 +15,10 @@ const handleRequest = frames(async (ctx) => {
       </>
     ),
     buttons: [
-      <Button action="post" target={{ query: { value: "Yes" } }}>
-        Say Yes
+      <Button action="post" target={{ query: { value: "Yes" }, pathname: "/frames" }}>
+        Check Stats
       </Button>,
-      <Button action="post" target={{ query: { value: "No" } }}>
+      <Button action="post" target={{ query: { value: "No" }, pathname: "/frames" }}>
         Say No
       </Button>,
     ],
