@@ -35,6 +35,37 @@ const getUsers = (stats: Stats) => {
   })
 }
 
+const IntroPage = () => {
+  return (
+    <div tw="flex">
+      <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-center p-8">
+        <h2 tw="flex flex-col text-8xl font-bold tracking-tight text-left">
+          <span tw="font-bold pb-5" style={{color: "#b16286"}}>Do you Yoink? 🚩</span>
+          <span tw="font-bold" style={{color: "#8ec07c"}}>Check your stats!</span>
+        </h2>
+        {/*<div tw="mt-8 flex md:mt-0">
+          <div tw="flex rounded-md shadow">
+            <a
+              href="#"
+              tw="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white"
+            >
+              Get started
+            </a>
+          </div>
+          <div tw="ml-3 flex rounded-md shadow">
+            <a
+              href="#"
+              tw="flex items-center justify-center rounded-md border border-transparent bg-white px-5 py-3 text-base font-medium text-indigo-600"
+            >
+              Learn more
+            </a>
+          </div>
+        </div>*/}
+      </div>
+    </div>
+  )
+}
+
 const handleRequest = frames(async (ctx) => {
   const username = ctx.message?.requesterUserData?.username;
 
@@ -49,16 +80,9 @@ const handleRequest = frames(async (ctx) => {
 
   return {
     image: (
-      <div tw="flex">
-        <div>🚩</div>
-        {username &&
-          <div>{temp}</div>
-        }
-        <div>
-          {ctx.pressedButton
-            ? `I clicked ${ctx.searchParams.value}`
-            : `Click some button`}
-        </div>
+      <div tw="w-full h-full text-white justify-center items-center flex flex-col"
+           style={{backgroundColor: "#282828" }}>
+        <IntroPage />
       </div>
     ),
     buttons: [
