@@ -11,7 +11,6 @@ export async function generateMetadata() {
     other: metaData,
     openGraph: {
       title: "Yoink Stats",
-      images: [metaData["fc:frame:image"]],
     }
   };
 }
