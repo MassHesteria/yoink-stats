@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-key */
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
+import { getHostName } from "../data";
  
 const handleRequest = frames(async (ctx) => {
   return {
@@ -15,10 +16,10 @@ const handleRequest = frames(async (ctx) => {
       </>
     ),
     buttons: [
-      <Button action="post" target={{ query: { value: "Yes" }, pathname: "/frames" }}>
+      <Button action="post" target={getHostName() + "/frames?value=Yes"}>
         Check Stats
       </Button>,
-      <Button action="post" target={{ query: { value: "No" }, pathname: "/frames" }}>
+      <Button action="post" target={getHostName() + "/frames?value=No"}>
         Say No
       </Button>,
     ],
