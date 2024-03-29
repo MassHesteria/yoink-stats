@@ -3,7 +3,7 @@ import { getHostName } from "./data";
  
 export async function generateMetadata() {
   return {
-    title: "My Page",
+    title: "Yoink Stats",
     // provide a full URL to your /frames endpoint
     other: await fetchMetadata(
       new URL("/frames", getHostName())
@@ -12,5 +12,5 @@ export async function generateMetadata() {
 }
  
 export default function Page() {
-  return <span>My existing page</span>;
+  return <span>Frame to check your stats on Yoink 🚩</span>;
 }
