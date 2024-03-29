@@ -90,7 +90,7 @@ const NonePage = ({ username }: { username: string }) => {
             </div>
             <div tw="flex flex-col text-right justify-end">
               <div tw="flex text-7xl mb-1">
-                <span style={{color: "#8ec07c"}}>You've never Yoinked!</span>
+                <span style={{color: "#8ec07c"}}>You have never Yoinked!</span>
               </div>
             </div>
           </div>
