@@ -75,8 +75,37 @@ const IntroPage = () => {
   )
 }
 
+const NonePage = ({ username }: { username: string }) => {
+  const nameSizeClass = username.length > 20 ? "text-7xl" : "text-8xl";
+  const displayName = username.length > 0 ? username : "(unknown)";
+  return (
+    <div tw="flex h-full">
+      <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
+        <h2 tw="flex flex-col font-bold tracking-tight text-left">
+          <div tw="flex flex-col">
+            <div tw="flex flex-col justify-end">
+              <div tw={`flex ${nameSizeClass}`}>
+                <span tw="" style={{color: "#b16286"}}>{displayName}</span>
+              </div>
+            </div>
+            <div tw="flex flex-col text-right justify-end">
+              <div tw="flex text-7xl mb-1">
+                <span style={{color: "#8ec07c"}}>You've never Yoinked!</span>
+              </div>
+            </div>
+          </div>
+        </h2>
+      </div>
+      <span tw="absolute bottom-2 right-4">/yoink 🚩</span>
+    </div>
+  )
+}
+
 const RankPage = ({ username, rank, total, yoinks, time }: { username: string, rank: number, total: number, yoinks: number, time: number}) => {
   const nameSizeClass = username.length > 20 ? "text-7xl" : "text-8xl";
+  if (rank <= 0) {
+    return <NonePage username={username} />
+  }
   return (
     <div tw="flex h-full">
       <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
@@ -151,11 +180,14 @@ const handleRequest = frames(async (ctx) => {
       </div>
     ),
     buttons: [
-      <Button action="post" target={getHostName() + "/frames?value=Yes"}>
+      <Button action="post" target={getHostName() + "/frames"}>
         Check Stats
       </Button>,
-      <Button action="link" target="http://yoink.terminally.online">
-        Leaderboard
+      <Button action="link" target="https://yoink.terminally.online">
+        Full Leaderboard
+      </Button>,
+      <Button action="link" target="https://warpcast.com/horsefacts.eth/0x2dacf32d">
+        Go Yoink!
       </Button>,
     ],
   };
