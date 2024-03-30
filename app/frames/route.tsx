@@ -23,15 +23,7 @@ const getUsers = (stats: Stats) => {
     const username = stats.users[userId];
     const yoinks = stats.userYoinks[userId] || 0;
     const times = stats.userTimes[userId] || 0;
-    const color = userId.startsWith("farcaster")
-      ? "text-fc-purple"
-      : userId.startsWith("lens")
-        ? "text-lens-pink"
-        : "text-black";
-    const url = userId.startsWith("farcaster")
-      ? `https://warpcast.com/${username}`
-      : `https://hey.xyz/u/${username}`;
-    return { userId, username, yoinks, times, color, url };
+    return { userId, username, yoinks, times };
   })
 }
 
@@ -101,50 +93,82 @@ const NonePage = ({ username }: { username: string }) => {
   )
 }
 
-const RankPage = ({ username, rank, total, yoinks, time }: { username: string, rank: number, total: number, yoinks: number, time: number}) => {
-  const nameSizeClass = username.length > 20 ? "text-7xl" : "text-8xl";
-  if (rank <= 0) {
-    return <NonePage username={username} />
-  }
-  return (
-    <div tw="flex h-full">
-      <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
-        <h2 tw="flex flex-col font-bold tracking-tight text-left">
-          <div tw="flex flex-col">
-            <div tw="flex flex-col justify-end">
-              <div tw={`flex ${nameSizeClass}`}>
-                <span tw="" style={{color: "#b16286"}}>{username}</span>
-              </div>
-            </div>
-            <div tw="flex flex-col text-right justify-end">
-              <div tw="flex text-7xl mb-1">
-                {/*<span tw="pr-4" style={{color: "#928374" }}>Rank</span>*/}
-                <span tw="pr-4" style={{color: "#fabd2f"}}>{rank}</span>
-                <span tw="pr-4" style={{color: "#928374"}}>/</span>
-                <span tw="" style={{color: "#fabd2f"}}>{total}</span>
-              </div>
-            </div>
-          </div>
-          <div tw="flex pt-9 flex-wrap">
-            <div tw="flex pr-10">
-              <span tw="" style={{color: "#8ec07c"}}>Yoinks</span>
-              <span tw="pl-4" style={{color: "#458588"}}>{yoinks}</span>
-            </div>
-            <div tw="flex">
-              <span tw="" style={{color: "#8ec07c"}}>Time Held</span>
-              <span tw="pl-4" style={{color: "#458588"}}>{formatTime(time)}</span>
-            </div>
-          </div>
-          <div tw="flex">
-            <span tw="" style={{color: "#8ec07c"}}>Average Time Held</span>
-            <span tw="pl-4" style={{color: "#458588"}}>{formatTime(Math.floor(time/yoinks))}</span>
-          </div>
-        </h2>
+const RankPage = ({
+   username,
+   rank,
+   total,
+   yoinks,
+   time,
+}: {
+   username: string;
+   rank: number;
+   total: number;
+   yoinks: number;
+   time: number;
+}) => {
+   const nameSizeClass = username.length > 20 ? "text-7xl" : "text-8xl";
+   if (rank <= 0) {
+      return <NonePage username={username} />;
+   }
+   return (
+      <div tw="flex h-full">
+         <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
+            <h2 tw="flex flex-col font-bold tracking-tight text-left">
+               <div tw="flex flex-col">
+                  <div tw="flex flex-col justify-end">
+                     <div tw={`flex ${nameSizeClass}`}>
+                        <span tw="" style={{ color: "#b16286" }}>
+                           {username}
+                        </span>
+                     </div>
+                  </div>
+                  <div tw="flex flex-col text-right justify-end">
+                     <div tw="flex text-7xl mb-1">
+                        {/*<span tw="pr-4" style={{color: "#928374" }}>Rank</span>*/}
+                        <span tw="pr-4" style={{ color: "#fabd2f" }}>
+                           {rank}
+                        </span>
+                        <span tw="pr-4" style={{ color: "#928374" }}>
+                           /
+                        </span>
+                        <span tw="" style={{ color: "#fabd2f" }}>
+                           {total}
+                        </span>
+                     </div>
+                  </div>
+               </div>
+               <div tw="flex pt-9 flex-wrap">
+                  <div tw="flex pr-10">
+                     <span tw="" style={{ color: "#8ec07c" }}>
+                        Yoinks
+                     </span>
+                     <span tw="pl-4" style={{ color: "#458588" }}>
+                        {yoinks}
+                     </span>
+                  </div>
+                  <div tw="flex">
+                     <span tw="" style={{ color: "#8ec07c" }}>
+                        Time Held
+                     </span>
+                     <span tw="pl-4" style={{ color: "#458588" }}>
+                        {formatTime(time)}
+                     </span>
+                  </div>
+               </div>
+               <div tw="flex">
+                  <span tw="" style={{ color: "#8ec07c" }}>
+                     Average Time Held
+                  </span>
+                  <span tw="pl-4" style={{ color: "#458588" }}>
+                     {formatTime(Math.floor(time / yoinks))}
+                  </span>
+               </div>
+            </h2>
+         </div>
+         <span tw="absolute bottom-2 right-4">/yoink 🚩</span>
       </div>
-      <span tw="absolute bottom-2 right-4">/yoink 🚩</span>
-    </div>
-  )
-}
+   );
+};
 
 const handleRequest = frames(async (ctx) => {
   const username = ctx.message?.requesterUserData?.username;
