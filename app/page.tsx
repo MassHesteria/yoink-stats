@@ -1,13 +1,20 @@
 import { fetchMetadata } from "frames.js/next";
 import { getHostName } from "./data";
- 
-export async function generateMetadata() {
-  const metaData = await fetchMetadata(new URL("/frames", getHostName()));
+
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata({ searchParams }: Props) {
+  const routeUrl = new URL("/frames", getHostName());
+  routeUrl.search = searchParams.toString();
+
+  const metaData = await fetchMetadata(routeUrl);
   return {
     title: "Yoink Stats",
     description: "Check your stats on Yoink",
     metadataBase: new URL(getHostName()),
-    // provide a full URL to your /frames endpoint
     other: metaData,
     openGraph: {
       title: "Yoink Stats",
