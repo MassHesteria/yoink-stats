@@ -129,7 +129,7 @@ const RankPage = ({
                            {rank}
                         </span>
                         <span tw="pr-4" style={{ color: "#928374" }}>
-                           /
+                           of
                         </span>
                         <span tw="" style={{ color: "#fabd2f" }}>
                            {total}
@@ -171,26 +171,29 @@ const RankPage = ({
 };
 
 const handleRequest = frames(async (ctx) => {
-  const fid = ctx.searchParams?.fid;
-  const username = ctx.message?.requesterUserData?.username;
-  console.log(fid)
+  let fid = ctx.message?.requesterFid;
+  if (fid == null) {
+    if (ctx.searchParams?.fid) {
+      fid = parseInt(ctx.searchParams.fid);
+    }
+  }
 
-  let temp = "";
+  let username = "";
   let rank = 10000;
   let total = 10000;
   let yoinks = 12345678
   let time = 1234567890;
-  if (username) {
+  if (fid) {
     let res = await fetch("https://yoink.terminally.online/api/stats");
     const stats = await res.json();
     const leaderboard = getUsers(stats).sort((a, b) => b.times - a.times);
-    rank = leaderboard.findIndex(p => p.username === username)+1;
+    rank = leaderboard.findIndex(p => p.userId == `farcaster:${fid}`)+1;
     if (rank > 0) {
       total = leaderboard.length;
       const user = leaderboard[rank-1];
       yoinks = user.yoinks;
       time = user.times;
-      temp = username;
+      username = user.username;
     }
   }
 
@@ -199,7 +202,7 @@ const handleRequest = frames(async (ctx) => {
       <div tw="w-full h-full text-white justify-center items-center flex flex-col"
            style={{backgroundColor: "#282828" }}>
         {username ?
-        <RankPage username={temp} rank={rank} total={total} yoinks={yoinks} time={time} />
+        <RankPage username={username} rank={rank} total={total} yoinks={yoinks} time={time} />
         :
         <IntroPage />
         }
@@ -207,13 +210,13 @@ const handleRequest = frames(async (ctx) => {
     ),
     buttons: [
       <Button action="post" target={getHostName() + "/frames"}>
-        Check Stats
+        Check Your Stats ↻
       </Button>,
       <Button action="link" target="https://yoink.terminally.online">
         Full Leaderboard
       </Button>,
       <Button action="link" target="https://warpcast.com/horsefacts.eth/0x2dacf32d">
-        Go Yoink!
+        Go Yoink 🚩
       </Button>,
     ],
   };
