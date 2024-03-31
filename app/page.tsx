@@ -1,17 +1,13 @@
 import { fetchMetadata } from "frames.js/next";
-import { headers } from "next/headers";
 import { getHostName } from "./data";
 
-/*type Props = {
+type Props = {
   params: { id: string }
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export async function generateMetadata({ searchParams }: Props) {
-  const headersList = headers();
-  console.log('-------')
-  console.log(headersList)
-  const routeUrl = new URL("/frames", getHostName());
+  const routeUrl = new URL("/frames", getHostName())
 
   for (let key in searchParams) {
     let value = searchParams[key];
@@ -34,7 +30,7 @@ export async function generateMetadata({ searchParams }: Props) {
       title: "Yoink Stats",
     }
   };
-}*/
+}
  
 export default function Page() {
   return <span>Frame to check your stats on Yoink 🚩</span>;
