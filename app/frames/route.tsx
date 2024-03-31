@@ -171,7 +171,9 @@ const RankPage = ({
 };
 
 const handleRequest = frames(async (ctx) => {
+  const fid = ctx.searchParams?.fid;
   const username = ctx.message?.requesterUserData?.username;
+  console.log(fid)
 
   let temp = "";
   let rank = 10000;

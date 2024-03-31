@@ -8,7 +8,17 @@ type Props = {
 
 export async function generateMetadata({ searchParams }: Props) {
   const routeUrl = new URL("/frames", getHostName());
-  routeUrl.search = searchParams.toString();
+
+  for (let key in searchParams) {
+    let value = searchParams[key];
+    if (value !== undefined) {
+      if (Array.isArray(value)) {
+        value.forEach(val => routeUrl.searchParams.append(key, val));
+      } else {
+        routeUrl.searchParams.append(key, value);
+      }
+    }
+  }
 
   const metaData = await fetchMetadata(routeUrl);
   return {
