@@ -178,7 +178,7 @@ const handleRequest = frames(async (ctx) => {
       fid = parseInt(ctx.searchParams.fid);
     }
   } else {
-    buttonTwo = { link: "https://warpcast.com/~/compose?embeds[]=" + getHostName() + `?fid=${fid}`, text: "Share" }
+    buttonTwo = { link: "https://warpcast.com/~/compose?embeds[]=" + encodeURIComponent(getHostName() + `?fid=${fid}`), text: "Share" }
   }
 
   let username = "";
