@@ -1,2 +1,5 @@
 # Yoink Stats!
-Frame that shows your stats for Yoink!
+Farcaster frame that shows your stats for Yoink!  
+https://yoink-stats.vercel.app
+
+![Demo](images/demo.png)
