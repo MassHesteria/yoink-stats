@@ -124,12 +124,12 @@ const RankPage = ({
                   </div>
                   <div tw="flex flex-col text-right justify-end">
                      <div tw="flex text-7xl mb-1">
-                        {/*<span tw="pr-4" style={{color: "#928374" }}>Rank</span>*/}
+                        <span tw="pr-4" style={{color: "#928374" }}>Rank</span>
                         <span tw="pr-4" style={{ color: "#fabd2f" }}>
                            {rank}
                         </span>
                         <span tw="pr-4" style={{ color: "#928374" }}>
-                           /
+                           of
                         </span>
                         <span tw="" style={{ color: "#fabd2f" }}>
                            {total}
@@ -171,24 +171,32 @@ const RankPage = ({
 };
 
 const handleRequest = frames(async (ctx) => {
-  const username = ctx.message?.requesterUserData?.username;
+  let fid = ctx.message?.requesterFid;
+  let buttonTwo = { link: "https://yoink.terminally.online", text: "Full Leaderboard"}
+  if (fid == null) {
+    if (ctx.searchParams?.fid) {
+      fid = parseInt(ctx.searchParams.fid);
+    }
+  } else {
+    buttonTwo = { link: "https://warpcast.com/~/compose?embeds[]=" + encodeURIComponent(getHostName() + `?fid=${fid}`), text: "Share" }
+  }
 
-  let temp = "";
+  let username = "";
   let rank = 10000;
   let total = 10000;
   let yoinks = 12345678
   let time = 1234567890;
-  if (username) {
+  if (fid) {
     let res = await fetch("https://yoink.terminally.online/api/stats");
     const stats = await res.json();
     const leaderboard = getUsers(stats).sort((a, b) => b.times - a.times);
-    rank = leaderboard.findIndex(p => p.username === username)+1;
+    rank = leaderboard.findIndex(p => p.userId == `farcaster:${fid}`)+1;
     if (rank > 0) {
       total = leaderboard.length;
       const user = leaderboard[rank-1];
       yoinks = user.yoinks;
       time = user.times;
-      temp = username;
+      username = user.username;
     }
   }
 
@@ -197,7 +205,7 @@ const handleRequest = frames(async (ctx) => {
       <div tw="w-full h-full text-white justify-center items-center flex flex-col"
            style={{backgroundColor: "#282828" }}>
         {username ?
-        <RankPage username={temp} rank={rank} total={total} yoinks={yoinks} time={time} />
+        <RankPage username={username} rank={rank} total={total} yoinks={yoinks} time={time} />
         :
         <IntroPage />
         }
@@ -205,13 +213,13 @@ const handleRequest = frames(async (ctx) => {
     ),
     buttons: [
       <Button action="post" target={getHostName() + "/frames"}>
-        Check Stats
+        Check Your Stats ↻
       </Button>,
-      <Button action="link" target="https://yoink.terminally.online">
-        Full Leaderboard
+      <Button action="link" target={buttonTwo.link}>
+        {buttonTwo.text}
       </Button>,
       <Button action="link" target="https://warpcast.com/horsefacts.eth/0x2dacf32d">
-        Go Yoink!
+        Go Yoink 🚩
       </Button>,
     ],
   };

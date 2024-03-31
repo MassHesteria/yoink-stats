@@ -1,5 +1,8 @@
+import { headers } from "next/headers";
+
 export const getHostName = (): string => {
-  return process.env.NEXT_PUBLIC_VERCEL_ENV
-         ? "https://yoink-stats.vercel.app"
-         : "http://localhost:3001"
+  const headersList = headers();
+  const host = headersList.get('x-forwarded-host');
+  const proto = headersList.get('x-forwarded-proto');
+  return `${proto}://${host}`;
 }
