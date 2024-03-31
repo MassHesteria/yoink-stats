@@ -211,10 +211,6 @@ const handleRequest = frames(async (ctx) => {
         }
       </div>
     ),
-    imageOptions: {
-      width: 800,
-      height: 420,
-    },
     buttons: [
       <Button action="post" target={getHostName() + "/frames"}>
         Get Your Stats ↻
@@ -226,9 +222,6 @@ const handleRequest = frames(async (ctx) => {
         Go Yoink 🚩
       </Button>,
     ],
-    headers: {
-      "Cache-Control": "public, immutable, no-transform, max-age=31536000",
-    }
   };
 });
  

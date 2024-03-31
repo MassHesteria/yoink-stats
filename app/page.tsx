@@ -25,11 +25,11 @@ export async function generateMetadata({ searchParams }: Props) {
     title: "Yoink Stats",
     description: "Check your stats on Yoink",
     metadataBase: new URL(getHostName()),
-    other: metaData,
     openGraph: {
       title: "Yoink Stats",
       images: [routeUrl.href],
-    }
+    },
+    other: metaData,
   };
 }
  
