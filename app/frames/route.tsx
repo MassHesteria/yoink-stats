@@ -124,7 +124,7 @@ const RankPage = ({
                   </div>
                   <div tw="flex flex-col text-right justify-end">
                      <div tw="flex text-7xl mb-1">
-                        {/*<span tw="pr-4" style={{color: "#928374" }}>Rank</span>*/}
+                        <span tw="pr-4" style={{color: "#928374" }}>Rank</span>
                         <span tw="pr-4" style={{ color: "#fabd2f" }}>
                            {rank}
                         </span>
