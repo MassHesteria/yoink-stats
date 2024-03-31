@@ -172,10 +172,13 @@ const RankPage = ({
 
 const handleRequest = frames(async (ctx) => {
   let fid = ctx.message?.requesterFid;
+  let buttonTwo = { link: "https://yoink.terminally.online", text: "Full Leaderboard"}
   if (fid == null) {
     if (ctx.searchParams?.fid) {
       fid = parseInt(ctx.searchParams.fid);
     }
+  } else {
+    buttonTwo = { link: "https://warpcast.com/~/compose?embeds[]=" + getHostName() + `?fid=${fid}`, text: "Share" }
   }
 
   let username = "";
@@ -212,8 +215,8 @@ const handleRequest = frames(async (ctx) => {
       <Button action="post" target={getHostName() + "/frames"}>
         Check Your Stats ↻
       </Button>,
-      <Button action="link" target="https://yoink.terminally.online">
-        Full Leaderboard
+      <Button action="link" target={buttonTwo.link}>
+        {buttonTwo.text}
       </Button>,
       <Button action="link" target="https://warpcast.com/horsefacts.eth/0x2dacf32d">
         Go Yoink 🚩
