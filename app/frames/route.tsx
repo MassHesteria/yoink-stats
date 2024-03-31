@@ -2,6 +2,7 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
 import { getHostName } from "../data";
+import { ImageResponse } from "next/og";
 
 interface Flag {
   yoinkedAt: number;
@@ -224,6 +225,19 @@ const handleRequest = frames(async (ctx) => {
     ],
   };
 });
+
+export default async function Image({ params }: { params: { seed: string } }) {
+  return new ImageResponse(
+    <div
+      style={{
+        display: 'flex',
+      }}
+    >
+      <span>Test Image</span>
+    </div>
+  )
+}
+
  
 export const GET = handleRequest;
 export const POST = handleRequest;
