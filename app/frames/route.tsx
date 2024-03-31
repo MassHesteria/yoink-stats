@@ -213,7 +213,7 @@ const handleRequest = frames(async (ctx) => {
     ),
     buttons: [
       <Button action="post" target={getHostName() + "/frames"}>
-        Check Your Stats ↻
+        Get Your Stats ↻
       </Button>,
       <Button action="link" target={buttonTwo.link}>
         {buttonTwo.text}
@@ -222,6 +222,9 @@ const handleRequest = frames(async (ctx) => {
         Go Yoink 🚩
       </Button>,
     ],
+    headers: {
+      "Cache-Control": "public, immutable, no-transform, max-age=31536000",
+    }
   };
 });
  

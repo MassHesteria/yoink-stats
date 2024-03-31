@@ -28,6 +28,7 @@ export async function generateMetadata({ searchParams }: Props) {
     other: metaData,
     openGraph: {
       title: "Yoink Stats",
+      images: [routeUrl.href],
     }
   };
 }
