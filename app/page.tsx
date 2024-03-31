@@ -33,5 +33,10 @@ export async function generateMetadata({ searchParams }: Props) {
 }
  
 export default function Page() {
-  return <span>Frame to check your stats on Yoink 🚩</span>;
+  return (
+    <div className="pl-2 pt-2">
+      <div>Frame to check your stats on Yoink 🚩</div>
+      <div><a className="text-red-600 no-underline hover:underline" href="https://github.com/masshesteria/yoink-stats">Source code</a></div>
+    </div>
+  )
 }
