@@ -165,14 +165,7 @@ const RankPage = ({
    );
 };
 
-export const generateImage = async (requesterFid: number|null, searchParams: any) => {
-  let fid = requesterFid;
-  if (fid == null) {
-    if (searchParams?.fid) {
-      fid = parseInt(searchParams.fid);
-    }
-  }
-
+export const generateImage = async (fid?: number) => {
   let username = "";
   let rank = 10000;
   let total = 10000;
