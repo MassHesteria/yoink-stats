@@ -1,7 +1,3 @@
-/* eslint-disable react/jsx-key */
-import { Button } from "frames.js/next";
-import { getHostName } from "../data";
-
 interface Flag {
   yoinkedAt: number;
   holderId: string;
@@ -171,13 +167,10 @@ const RankPage = ({
 
 export const generateImage = async (requesterFid: number|null, searchParams: any) => {
   let fid = requesterFid;
-  let buttonTwo = { link: "https://yoink.terminally.online", text: "Full Leaderboard"}
   if (fid == null) {
     if (searchParams?.fid) {
       fid = parseInt(searchParams.fid);
     }
-  } else {
-    buttonTwo = { link: "https://warpcast.com/~/compose?embeds[]=" + encodeURIComponent(getHostName() + `?fid=${fid}`), text: "Share" }
   }
 
   let username = "";
@@ -199,27 +192,14 @@ export const generateImage = async (requesterFid: number|null, searchParams: any
     }
   }
 
-  return {
-    image: (
-      <div tw="w-full h-full text-white justify-center items-center flex flex-col"
-           style={{backgroundColor: "#282828" }}>
-        {username ?
-        <RankPage username={username} rank={rank} total={total} yoinks={yoinks} time={time} />
-        :
-        <IntroPage />
-        }
-      </div>
-    ),
-    buttons: [
-      <Button action="post" target={getHostName() + "/frames"}>
-        Get Your Stats ↻
-      </Button>,
-      <Button action="link" target={buttonTwo.link}>
-        {buttonTwo.text}
-      </Button>,
-      <Button action="link" target="https://warpcast.com/horsefacts.eth/0x2dacf32d">
-        Go Yoink 🚩
-      </Button>,
-    ],
-  };
+  return (
+    <div tw="w-full h-full text-white justify-center items-center flex flex-col"
+         style={{backgroundColor: "#282828" }}>
+      {username ?
+      <RankPage username={username} rank={rank} total={total} yoinks={yoinks} time={time} />
+      :
+      <IntroPage />
+      }
+    </div>
+  );
 }
