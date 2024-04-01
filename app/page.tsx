@@ -20,6 +20,7 @@ export async function generateMetadata({ searchParams }: Props) {
     }
   }
 
+  const fidParam = searchParams.fid ? searchParams.fid + '/' : '';
   const metaData = await fetchMetadata(routeUrl);
   return {
     title: "Yoink Stats",
@@ -27,7 +28,7 @@ export async function generateMetadata({ searchParams }: Props) {
     metadataBase: new URL(getHostName()),
     openGraph: {
       title: "Yoink Stats",
-      images: [new URL("/frames/opengraph-image", getHostName())],
+      images: [new URL(`/frames/${fidParam}opengraph-image`, getHostName())],
     },
     other: metaData,
   };

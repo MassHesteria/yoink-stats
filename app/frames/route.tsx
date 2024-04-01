@@ -170,6 +170,61 @@ const RankPage = ({
    );
 };
 
+export const generateImage = async (requesterFid: number|null, searchParams: any) => {
+  let fid = requesterFid;
+  let buttonTwo = { link: "https://yoink.terminally.online", text: "Full Leaderboard"}
+  if (fid == null) {
+    if (searchParams?.fid) {
+      fid = parseInt(searchParams.fid);
+    }
+  } else {
+    buttonTwo = { link: "https://warpcast.com/~/compose?embeds[]=" + encodeURIComponent(getHostName() + `?fid=${fid}`), text: "Share" }
+  }
+
+  let username = "";
+  let rank = 10000;
+  let total = 10000;
+  let yoinks = 12345678
+  let time = 1234567890;
+  if (fid) {
+    let res = await fetch("https://yoink.terminally.online/api/stats");
+    const stats = await res.json();
+    const leaderboard = getUsers(stats).sort((a, b) => b.times - a.times);
+    rank = leaderboard.findIndex(p => p.userId == `farcaster:${fid}`)+1;
+    if (rank > 0) {
+      total = leaderboard.length;
+      const user = leaderboard[rank-1];
+      yoinks = user.yoinks;
+      time = user.times;
+      username = user.username;
+    }
+  }
+
+  return {
+    image: (
+      <div tw="w-full h-full text-white justify-center items-center flex flex-col"
+           style={{backgroundColor: "#282828" }}>
+        {username ?
+        <RankPage username={username} rank={rank} total={total} yoinks={yoinks} time={time} />
+        :
+        <IntroPage />
+        }
+      </div>
+    ),
+    buttons: [
+      <Button action="post" target={getHostName() + "/frames"}>
+        Get Your Stats ↻
+      </Button>,
+      <Button action="link" target={buttonTwo.link}>
+        {buttonTwo.text}
+      </Button>,
+      <Button action="link" target="https://warpcast.com/horsefacts.eth/0x2dacf32d">
+        Go Yoink 🚩
+      </Button>,
+    ],
+  };
+}
+
 const handleRequest = frames(async (ctx) => {
   let fid = ctx.message?.requesterFid;
   let buttonTwo = { link: "https://yoink.terminally.online", text: "Full Leaderboard"}
