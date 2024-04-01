@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { generateImage } from "../route";
+import { generateImage } from "../generate";
 
 export default async function Image({ params }: { params: { fid: string } }) {
   const temp = await generateImage(parseInt(params.fid), null);
