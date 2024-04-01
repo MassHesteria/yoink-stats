@@ -10,7 +10,7 @@ const handleRequest = frames(async (ctx) => {
      link: "https://yoink.terminally.online",
      text: "Full Leaderboard",
   };
-  if (fid == null) {
+  if (fid == undefined) {
      if (ctx.searchParams?.fid) {
         fid = parseInt(ctx.searchParams.fid);
      }
