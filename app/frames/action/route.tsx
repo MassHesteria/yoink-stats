@@ -105,10 +105,10 @@ export async function POST(req: NextRequest) {
       if (rank > 0) {
         const user = leaderboard[rank-1];
         //message = `#${rank} ⧖ ${formatTime(user.times)} ⚐ ${user.yoinks}`
-        message = `#${rank} ⏱ ${formatTime(user.times)} ⚐ ${user.yoinks}`
+        message = `#${rank} ⏱ ${formatTime(user.times)} 🚩 ${user.yoinks}`
         
         if (message.length > 30) {
-          message = `#${rank} ⚐ ${user.yoinks}`
+          message = `#${rank} 🚩 ${user.yoinks}`
         }
         //total = leaderboard.length;
         //yoinks = user.yoinks;
