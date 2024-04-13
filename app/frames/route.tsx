@@ -5,6 +5,8 @@ import { getHostName } from "../data";
 import { generateImage } from "./generate";
 
 const handleRequest = frames(async (ctx) => {
+  const timestamp = `${Date.now()}`
+  const baseRoute = getHostName() + "/frames?ts=" + timestamp
   let fid = ctx.message?.requesterFid;
   let buttonTwo = {
      link: "https://yoink.terminally.online",
@@ -18,7 +20,7 @@ const handleRequest = frames(async (ctx) => {
      buttonTwo = {
         link:
            "https://warpcast.com/~/compose?embeds[]=" +
-           encodeURIComponent(getHostName() + `?fid=${fid}`),
+           encodeURIComponent(baseRoute + `&fid=${fid}`),
         text: "Share",
      };
   }
@@ -26,7 +28,7 @@ const handleRequest = frames(async (ctx) => {
   return {
     image: await generateImage(fid),
     buttons: [
-      <Button action="post" target={getHostName() + "/frames"}>
+      <Button action="post" target={baseRoute}>
         Get Your Stats ↻
       </Button>,
       <Button action="link" target={buttonTwo.link}>
