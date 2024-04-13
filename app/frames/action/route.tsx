@@ -57,6 +57,33 @@ function formatTime(seconds: number) {
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = seconds % 60;
 
+  const parts = [];
+
+  if (days > 0) {
+    parts.push(`${days}d`);
+  }
+
+  if (hours > 0) {
+    parts.push(`${hours}h`);
+  }
+
+  if (minutes > 0) {
+    parts.push(`${minutes}m`);
+  }
+
+  if (remainingSeconds > 0) {
+    parts.push(`${remainingSeconds}s`);
+  }
+
+  return parts.join(' ');
+}
+
+function formatTimeAlt(seconds: number) {
+  const days = Math.floor(seconds / (3600 * 24));
+  const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+
   return (
     days.toString().padStart(2, '0') + ':' +
     hours.toString().padStart(2, '0') + ':' +
@@ -77,9 +104,9 @@ export async function POST(req: NextRequest) {
       const rank = leaderboard.findIndex(p => p.userId == `farcaster:${fid}`)+1;
       if (rank > 0) {
         const user = leaderboard[rank-1];
-        message = `#${rank} ${formatTime(user.times)} Yoinks ${user.yoinks}`
+        message = `# ${rank} ⧖ ${formatTime(user.times)} ⚐ ${user.yoinks}`
         if (message.length > 30) {
-          message = `Rank ${rank} - Yoinks ${user.yoinks}`
+          message = `# ${rank} ⚐ ${user.yoinks}`
         }
         //total = leaderboard.length;
         //yoinks = user.yoinks;
