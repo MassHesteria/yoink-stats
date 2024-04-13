@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
   })
 
   console.log('pre request')
-  handleRequest(req)
+  await handleRequest(req)
   console.log('post request')
 
   return Response.json({ message: JSON.stringify(req) + internal })
