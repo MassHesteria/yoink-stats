@@ -2,6 +2,8 @@
 import { NextRequest } from "next/server";
 import { frames } from "../frames";
 
+// https://warpcast.com/~/add-cast-action?url=https%3A%2F%2Fyoink-stats-canary.vercel.app%2Fframes%2Faction
+
 type ActionResponse = {
   name: string; // An action name up to 30 characters.
   icon: string; // An icon ID. See "Valid Icons"
@@ -30,6 +32,13 @@ export async function POST(req: NextRequest) {
 
   console.log('running POST')
   console.log('req:',JSON.stringify(req))
+
+  const handleRequest = frames(async (ctx) => {
+    console.log('frame handler:', JSON.stringify(ctx))
+    return ({
+      image: <div></div>,
+    })
+  })
 
   return Response.json({ message: JSON.stringify(req) })
 }
