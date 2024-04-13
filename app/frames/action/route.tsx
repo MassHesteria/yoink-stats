@@ -28,9 +28,10 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   let fid = undefined
 
-  console.log(JSON.stringify(req))
+  console.log('running POST')
+  console.log('req:',JSON.stringify(req))
 
-  return Response.json({ message: 'test' })
+  return Response.json({ message: JSON.stringify(req) })
 }
 
 //export const POST = frames(async (ctx) => {
