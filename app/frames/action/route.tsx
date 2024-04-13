@@ -17,7 +17,7 @@ type ActionResponse = {
 export async function GET(req: NextRequest) {
   const info: ActionResponse = {
     name: 'Yoink Stats',
-    icon: 'zap',
+    icon: 'list-ordered',
     description: 'Check /yoink stats for a user',
     aboutUrl: 'https://yoink-stats.vercel.app',
     action: {
@@ -90,15 +90,13 @@ export async function POST(req: NextRequest) {
       const rank = leaderboard.findIndex(p => p.userId == `farcaster:${fid}`)+1;
       if (rank > 0) {
         const user = leaderboard[rank-1];
-        message = `Rank ${rank}, Yoinks ${user.yoinks}`
+        message = `#${rank} - Yoinks ${user.yoinks}`
         //total = leaderboard.length;
         //yoinks = user.yoinks;
         //time = user.times;
         //username = user.username;
       }
     }
-    //internal = JSON.stringify(ctx)
-    //console.log('frame handler:', internal)
     return ({
       image: <div></div>
     })
