@@ -27,28 +27,86 @@ export async function GET(req: NextRequest) {
   return Response.json(info)
 }
 
-export async function POST(req: NextRequest) {
-  let fid = undefined
-  let internal = ''
+interface Flag {
+  yoinkedAt: number;
+  holderId: string;
+  holderName: string;
+  holderPlatform: string;
+}
 
-  console.log('running POST')
-  console.log('req:',JSON.stringify(req))
-  console.log('new one')
+export interface Stats {
+  flag: Flag;
+  yoinks: number;
+  userYoinks: { [key: string]: number };
+  userTimes: { [key: string]: number };
+  users: { [key: string]: string };
+}
+
+const getUsers = (stats: Stats) => {
+  return Object.keys(stats.users).map((userId) => {
+    const username = stats.users[userId];
+    const yoinks = stats.userYoinks[userId] || 0;
+    const times = stats.userTimes[userId] || 0;
+    return { userId, username, yoinks, times };
+  })
+}
+
+function formatTime(seconds: number) {
+  const days = Math.floor(seconds / (3600 * 24));
+  const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+
+  const parts = [];
+
+  if (days > 0) {
+    parts.push(`${days}d`);
+  }
+
+  if (hours > 0) {
+    parts.push(`${hours}h`);
+  }
+
+  if (minutes > 0) {
+    parts.push(`${minutes}m`);
+  }
+
+  if (remainingSeconds > 0) {
+    parts.push(`${remainingSeconds}s`);
+  }
+
+  return parts.join(' ');
+}
+
+export async function POST(req: NextRequest) {
+  let message = 'Could not find Yoink Stats'
 
   const handleRequest = frames(async (ctx) => {
-    internal = JSON.stringify(ctx)
-    console.log('frame handler:', internal)
+    const fid = ctx.message?.castId?.fid
+    if (fid) {
+      let res = await fetch("https://yoink.terminally.online/api/stats");
+      const stats = await res.json();
+      const leaderboard = getUsers(stats).sort((a, b) => b.times - a.times);
+      const rank = leaderboard.findIndex(p => p.userId == `farcaster:${fid}`)+1;
+      if (rank > 0) {
+        const user = leaderboard[rank-1];
+        message = `Rank ${rank}, Yoinks ${user.yoinks}`
+        //total = leaderboard.length;
+        //yoinks = user.yoinks;
+        //time = user.times;
+        //username = user.username;
+      }
+    }
+    //internal = JSON.stringify(ctx)
+    //console.log('frame handler:', internal)
     return ({
-      image: <div></div>,
-      buttons: []
+      image: <div></div>
     })
   })
 
-  console.log('pre request')
   await handleRequest(req)
-  console.log('post request')
 
-  return Response.json({ message: JSON.stringify(req) + internal })
+  return Response.json({ message })
 }
 
 //export const POST = frames(async (ctx) => {
