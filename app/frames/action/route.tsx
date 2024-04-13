@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
       const rank = leaderboard.findIndex(p => p.userId == `farcaster:${fid}`)+1;
       if (rank > 0) {
         const user = leaderboard[rank-1];
-        message = `#${rank} - Yoinks ${user.yoinks}`
+        message = `Rank ${rank} - Yoinks ${user.yoinks}`
         //total = leaderboard.length;
         //yoinks = user.yoinks;
         //time = user.times;
