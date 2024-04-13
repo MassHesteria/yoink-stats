@@ -2,7 +2,7 @@
 import { NextRequest } from "next/server";
 import { frames } from "../frames";
 
-// https://warpcast.com/~/add-cast-action?url=https%3A%2F%2Fyoink-stats-canary.vercel.app%2Fframes%2Faction
+// https://warpcast.com/~/add-cast-action?url=https%3A%2F%2Fyoink-stats.vercel.app%2Fframes%2Faction
 
 type ActionResponse = {
   name: string; // An action name up to 30 characters.
@@ -57,25 +57,12 @@ function formatTime(seconds: number) {
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = seconds % 60;
 
-  const parts = [];
-
-  if (days > 0) {
-    parts.push(`${days}d`);
-  }
-
-  if (hours > 0) {
-    parts.push(`${hours}h`);
-  }
-
-  if (minutes > 0) {
-    parts.push(`${minutes}m`);
-  }
-
-  if (remainingSeconds > 0) {
-    parts.push(`${remainingSeconds}s`);
-  }
-
-  return parts.join(' ');
+  return (
+    days.toString().padStart(2, '0') + ':' +
+    hours.toString().padStart(2, '0') + ':' +
+    minutes.toString().padStart(2, '0') + ':' +
+    remainingSeconds.toString().padStart(2, '0')
+  )
 }
 
 export async function POST(req: NextRequest) {
@@ -90,7 +77,10 @@ export async function POST(req: NextRequest) {
       const rank = leaderboard.findIndex(p => p.userId == `farcaster:${fid}`)+1;
       if (rank > 0) {
         const user = leaderboard[rank-1];
-        message = `Rank ${rank} - Yoinks ${user.yoinks}`
+        message = `#${rank} ${formatTime(user.times)} Yoinks ${user.yoinks}`
+        if (message.length > 30) {
+          message = `Rank ${rank} - Yoinks ${user.yoinks}`
+        }
         //total = leaderboard.length;
         //yoinks = user.yoinks;
         //time = user.times;
