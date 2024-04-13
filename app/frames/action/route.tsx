@@ -33,16 +33,20 @@ export async function POST(req: NextRequest) {
 
   console.log('running POST')
   console.log('req:',JSON.stringify(req))
+  console.log('new one')
 
   const handleRequest = frames(async (ctx) => {
     internal = JSON.stringify(ctx)
     console.log('frame handler:', internal)
     return ({
       image: <div></div>,
+      buttons: []
     })
   })
 
+  console.log('pre request')
   handleRequest(req)
+  console.log('post request')
 
   return Response.json({ message: JSON.stringify(req) + internal })
 }
