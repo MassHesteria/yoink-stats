@@ -29,18 +29,22 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   let fid = undefined
+  let internal = ''
 
   console.log('running POST')
   console.log('req:',JSON.stringify(req))
 
   const handleRequest = frames(async (ctx) => {
-    console.log('frame handler:', JSON.stringify(ctx))
+    internal = JSON.stringify(ctx)
+    console.log('frame handler:', internal)
     return ({
       image: <div></div>,
     })
   })
 
-  return Response.json({ message: JSON.stringify(req) })
+  handleRequest(req)
+
+  return Response.json({ message: JSON.stringify(req) + internal })
 }
 
 //export const POST = frames(async (ctx) => {
