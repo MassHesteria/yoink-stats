@@ -17,7 +17,7 @@ const handleRequest = frames(async (ctx) => {
       <div tw='flex w-full h-full bg-stone-200'>
         <div tw='flex flex-col m-auto'>
           <span>Get Yoink Stats for Users with a Cast Action</span>
-          <span tw='mx-auto mt-4 p-7 border-purple-500 rounded-lg border-2 bg-purple-800 font-extrabold text-white'>🏆 #33 ⏱ 4h 32m 16s 🚩 567</span>
+          <span tw='mx-auto mt-4 p-7 border-purple-500 rounded-lg border-2 bg-purple-950 font-extrabold text-white'>🏆 #33 ⏱ 4h 32m 16s 🚩 567</span>
         </div>
 
       </div>
