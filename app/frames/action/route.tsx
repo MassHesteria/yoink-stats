@@ -78,20 +78,6 @@ function formatTime(seconds: number) {
   return parts.join(' ');
 }
 
-function formatTimeAlt(seconds: number) {
-  const days = Math.floor(seconds / (3600 * 24));
-  const hours = Math.floor((seconds % (3600 * 24)) / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-
-  return (
-    days.toString().padStart(2, '0') + ':' +
-    hours.toString().padStart(2, '0') + ':' +
-    minutes.toString().padStart(2, '0') + ':' +
-    remainingSeconds.toString().padStart(2, '0')
-  )
-}
-
 export async function POST(req: NextRequest) {
   let message = 'Could not find Yoink Stats'
 
@@ -104,15 +90,12 @@ export async function POST(req: NextRequest) {
       const rank = leaderboard.findIndex(p => p.userId == `farcaster:${fid}`)+1;
       if (rank > 0) {
         const user = leaderboard[rank-1];
-        //message = `#${rank} ⧖ ${formatTime(user.times)} ⚐ ${user.yoinks}`
         message = `🏆 #${rank} ⏱ ${formatTime(user.times)} 🚩 ${user.yoinks}`
         
         if (message.length > 30) {
           message = `🏆 #${rank} 🚩 ${user.yoinks}`
         }
         //total = leaderboard.length;
-        //yoinks = user.yoinks;
-        //time = user.times;
         //username = user.username;
       }
     }
@@ -125,8 +108,3 @@ export async function POST(req: NextRequest) {
 
   return Response.json({ message })
 }
-
-//export const POST = frames(async (ctx) => {
-  //let fid = ctx.castId?.fid;
-  //return Response.json({ message: 'test' })
-//})
