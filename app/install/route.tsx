@@ -2,16 +2,18 @@
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames } from "frames.js/next";
 import { Button } from "frames.js/next";
-import { getHostName } from "../data";
+import { getHostName, getHubRoute } from "../data";
  
 const frames = createFrames({
-    middleware: [farcasterHubContext()]
+  middleware: [farcasterHubContext({
+    hubHttpUrl: getHubRoute()
+  })]
 });
 
 const handleRequest = frames(async (ctx) => {
   const warpcastLink = 'https://warpcast.com/~/add-cast-action?url=' +
     encodeURIComponent(getHostName() + '/frames/action')
-    
+
   return {
     image: (
       <div tw='flex w-full h-full bg-stone-200'>

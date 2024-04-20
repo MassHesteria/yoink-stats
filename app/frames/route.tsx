@@ -7,6 +7,13 @@ import { generateImage } from "./generate";
 const handleRequest = frames(async (ctx) => {
   const timestamp = `${Date.now()}`
   const baseRoute = getHostName() + "/frames?ts=" + timestamp
+  
+  if (ctx.message) {
+    if (!ctx.message.isValid) {
+      throw new Error('Could not validate request')
+    }
+  }
+
   let fid = ctx.message?.requesterFid;
   let buttonTwo = {
      link: "https://yoink.terminally.online",
@@ -34,7 +41,7 @@ const handleRequest = frames(async (ctx) => {
       <Button action="link" target={buttonTwo.link}>
         {buttonTwo.text}
       </Button>,
-      <Button action="link" target="https://warpcast.com/horsefacts.eth/0x2dacf32d">
+      <Button action="link" target="https://warpcast.com/horsefacts.eth/0x7d161970">
         Go Yoink 🚩
       </Button>,
     ],
