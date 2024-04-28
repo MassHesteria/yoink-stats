@@ -94,17 +94,21 @@ const RankPage = ({
    total,
    yoinks,
    time,
+   milestone
 }: {
    username: string;
    rank: number;
    total: number;
    yoinks: number;
    time: number;
+   milestone: { rank: number, time: number }
 }) => {
    const nameSizeClass = username.length > 20 ? "text-7xl" : "text-8xl";
    if (rank <= 0) {
       return <NonePage username={username} />;
    }
+   const statsLabelColor = "#8ec07c"
+   const statsValueColor = "#458588"
    return (
       <div tw="flex h-full">
          <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
@@ -132,29 +136,49 @@ const RankPage = ({
                      </div>
                   </div>
                </div>
-               <div tw="flex pt-9 flex-wrap">
+               <div tw="flex pl-1 pt-6 flex-wrap">
                   <div tw="flex pr-10">
-                     <span tw="" style={{ color: "#8ec07c" }}>
+                     <span tw="" style={{ color: statsLabelColor }}>
                         Yoinks
                      </span>
-                     <span tw="pl-4" style={{ color: "#458588" }}>
+                     <span tw="pl-4" style={{ color: statsValueColor }}>
                         {yoinks}
                      </span>
                   </div>
                   <div tw="flex">
-                     <span tw="" style={{ color: "#8ec07c" }}>
+                     <span tw="" style={{ color: statsLabelColor }}>
                         Time Held
                      </span>
-                     <span tw="pl-4" style={{ color: "#458588" }}>
+                     <span tw="pl-4" style={{ color: statsValueColor }}>
                         {formatTime(time)}
                      </span>
                   </div>
                </div>
-               <div tw="flex">
-                  <span tw="" style={{ color: "#8ec07c" }}>
+               {milestone.rank > 0 &&
+               <div tw="flex flex-wrap pl-1">
+                  <span tw="" style={{ color: statsLabelColor }}>
+                    Next Milestone
+                  </span>
+                  <span tw="pl-4 pr-4" style={{ color: statsValueColor }}>
+                    {milestone.rank % 100 == 0 ?
+                    `Top ${milestone.rank}`
+                    :
+                    `Rank ${milestone.rank}`
+                    }
+                  </span>
+                  <span tw="" style={{ color: statsLabelColor }}>
+                    at
+                  </span>
+                  <span tw="pl-4" style={{ color: statsValueColor }}>
+                    {formatTime(milestone.time)}
+                  </span>
+               </div>
+               }
+               <div tw="flex pl-1">
+                  <span tw="" style={{ color: statsLabelColor }}>
                      Average Time Held
                   </span>
-                  <span tw="pl-4" style={{ color: "#458588" }}>
+                  <span tw="pl-4" style={{ color: statsValueColor }}>
                      {formatTime(Math.floor(time / yoinks))}
                   </span>
                </div>
@@ -171,6 +195,7 @@ export const generateImage = async (fid?: number) => {
   let total = 10000;
   let yoinks = 12345678
   let time = 1234567890;
+  let milestone = { rank: 0, time: 0 }
   if (fid) {
     let res = await fetch("https://yoink.terminally.online/api/stats");
     const stats = await res.json();
@@ -182,17 +207,48 @@ export const generateImage = async (fid?: number) => {
       yoinks = user.yoinks;
       time = user.times;
       username = user.username;
+
+      if (rank > 1) {
+        if (rank > 500) {
+          milestone.rank = 500;
+          milestone.time = leaderboard[499].times
+        } else if (rank > 400) {
+          milestone.rank = 400;
+          milestone.time = leaderboard[399].times
+        } else if (rank > 300) {
+          milestone.rank = 300;
+          milestone.time = leaderboard[299].times
+        } else if (rank > 200) {
+          milestone.rank = 200;
+          milestone.time = leaderboard[199].times
+        } else if (rank > 100) {
+          milestone.rank = 100;
+          milestone.time = leaderboard[99].times
+        } else {
+          milestone.rank = rank-1;
+          milestone.time = leaderboard[rank-2].times
+        }
+      }
     }
   }
 
   return (
-    <div tw="w-full h-full text-white justify-center items-center flex flex-col"
-         style={{backgroundColor: "#282828" }}>
-      {username ?
-      <RankPage username={username} rank={rank} total={total} yoinks={yoinks} time={time} />
-      :
-      <IntroPage />
-      }
-    </div>
+     <div
+        tw="w-full h-full text-white justify-center items-center flex flex-col"
+        style={{ backgroundColor: "#282828" }}
+     >
+        {username ? (
+           <RankPage
+              username={username}
+              rank={rank}
+              total={total}
+              yoinks={yoinks}
+              time={time}
+              milestone={milestone}
+           />
+        ) : (
+           <IntroPage />
+        )}
+     </div>
   );
 }
