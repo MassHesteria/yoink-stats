@@ -94,12 +94,14 @@ const RankPage = ({
    total,
    yoinks,
    time,
+   milestone
 }: {
    username: string;
    rank: number;
    total: number;
    yoinks: number;
    time: number;
+   milestone: { rank: number, time: number }
 }) => {
    const nameSizeClass = username.length > 20 ? "text-7xl" : "text-8xl";
    if (rank <= 0) {
@@ -132,7 +134,7 @@ const RankPage = ({
                      </div>
                   </div>
                </div>
-               <div tw="flex pt-9 flex-wrap">
+               <div tw="flex pl-1 pt-6 flex-wrap">
                   <div tw="flex pr-10">
                      <span tw="" style={{ color: "#8ec07c" }}>
                         Yoinks
@@ -150,7 +152,27 @@ const RankPage = ({
                      </span>
                   </div>
                </div>
-               <div tw="flex">
+               {milestone.rank > 0 &&
+               <div tw="flex flex-wrap pl-1">
+                  <span tw="" style={{ color: "#8ec07c" }}>
+                    Next Milestone
+                  </span>
+                  <span tw="pl-4 pr-4" style={{ color: "#458588" }}>
+                    {milestone.rank % 100 == 0 ?
+                    `Top ${milestone.rank}`
+                    :
+                    `Rank ${milestone.rank}`
+                    }
+                  </span>
+                  <span tw="" style={{ color: "#8ec07c" }}>
+                    at
+                  </span>
+                  <span tw="pl-4" style={{ color: "#458588" }}>
+                    {formatTime(milestone.time)}
+                  </span>
+               </div>
+               }
+               <div tw="flex pl-1">
                   <span tw="" style={{ color: "#8ec07c" }}>
                      Average Time Held
                   </span>
@@ -171,6 +193,7 @@ export const generateImage = async (fid?: number) => {
   let total = 10000;
   let yoinks = 12345678
   let time = 1234567890;
+  let milestone = { rank: 0, time: 0 }
   if (fid) {
     let res = await fetch("https://yoink.terminally.online/api/stats");
     const stats = await res.json();
@@ -182,17 +205,48 @@ export const generateImage = async (fid?: number) => {
       yoinks = user.yoinks;
       time = user.times;
       username = user.username;
+
+      if (rank > 1) {
+        if (rank > 500) {
+          milestone.rank = 500;
+          milestone.time = leaderboard[499].times
+        } else if (rank > 400) {
+          milestone.rank = 400;
+          milestone.time = leaderboard[399].times
+        } else if (rank > 300) {
+          milestone.rank = 300;
+          milestone.time = leaderboard[299].times
+        } else if (rank > 200) {
+          milestone.rank = 200;
+          milestone.time = leaderboard[199].times
+        } else if (rank > 100) {
+          milestone.rank = 100;
+          milestone.time = leaderboard[99].times
+        } else {
+          milestone.rank = rank-1;
+          milestone.time = leaderboard[rank-2].times
+        }
+      }
     }
   }
 
   return (
-    <div tw="w-full h-full text-white justify-center items-center flex flex-col"
-         style={{backgroundColor: "#282828" }}>
-      {username ?
-      <RankPage username={username} rank={rank} total={total} yoinks={yoinks} time={time} />
-      :
-      <IntroPage />
-      }
-    </div>
+     <div
+        tw="w-full h-full text-white justify-center items-center flex flex-col"
+        style={{ backgroundColor: "#282828" }}
+     >
+        {username ? (
+           <RankPage
+              username={username}
+              rank={rank}
+              total={total}
+              yoinks={yoinks}
+              time={time}
+              milestone={milestone}
+           />
+        ) : (
+           <IntroPage />
+        )}
+     </div>
   );
 }
