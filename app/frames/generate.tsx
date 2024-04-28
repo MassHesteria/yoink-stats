@@ -107,6 +107,8 @@ const RankPage = ({
    if (rank <= 0) {
       return <NonePage username={username} />;
    }
+   const statsLabelColor = "#8ec07c"
+   const statsValueColor = "#458588"
    return (
       <div tw="flex h-full">
          <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
@@ -136,47 +138,47 @@ const RankPage = ({
                </div>
                <div tw="flex pl-1 pt-6 flex-wrap">
                   <div tw="flex pr-10">
-                     <span tw="" style={{ color: "#8ec07c" }}>
+                     <span tw="" style={{ color: statsLabelColor }}>
                         Yoinks
                      </span>
-                     <span tw="pl-4" style={{ color: "#458588" }}>
+                     <span tw="pl-4" style={{ color: statsValueColor }}>
                         {yoinks}
                      </span>
                   </div>
                   <div tw="flex">
-                     <span tw="" style={{ color: "#8ec07c" }}>
+                     <span tw="" style={{ color: statsLabelColor }}>
                         Time Held
                      </span>
-                     <span tw="pl-4" style={{ color: "#458588" }}>
+                     <span tw="pl-4" style={{ color: statsValueColor }}>
                         {formatTime(time)}
                      </span>
                   </div>
                </div>
                {milestone.rank > 0 &&
                <div tw="flex flex-wrap pl-1">
-                  <span tw="" style={{ color: "#8ec07c" }}>
+                  <span tw="" style={{ color: statsLabelColor }}>
                     Next Milestone
                   </span>
-                  <span tw="pl-4 pr-4" style={{ color: "#458588" }}>
+                  <span tw="pl-4 pr-4" style={{ color: statsValueColor }}>
                     {milestone.rank % 100 == 0 ?
                     `Top ${milestone.rank}`
                     :
                     `Rank ${milestone.rank}`
                     }
                   </span>
-                  <span tw="" style={{ color: "#8ec07c" }}>
+                  <span tw="" style={{ color: statsLabelColor }}>
                     at
                   </span>
-                  <span tw="pl-4" style={{ color: "#458588" }}>
+                  <span tw="pl-4" style={{ color: statsValueColor }}>
                     {formatTime(milestone.time)}
                   </span>
                </div>
                }
                <div tw="flex pl-1">
-                  <span tw="" style={{ color: "#8ec07c" }}>
+                  <span tw="" style={{ color: statsLabelColor }}>
                      Average Time Held
                   </span>
-                  <span tw="pl-4" style={{ color: "#458588" }}>
+                  <span tw="pl-4" style={{ color: statsValueColor }}>
                      {formatTime(Math.floor(time / yoinks))}
                   </span>
                </div>
