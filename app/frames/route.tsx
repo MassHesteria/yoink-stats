@@ -17,20 +17,23 @@ const handleRequest = frames(async (ctx) => {
 
   let fid = ctx.message?.requesterFid;
   if (fid == undefined) {
-     if (ctx.searchParams?.fid == undefined) {
+    if (ctx.searchParams?.fid == undefined) {
       return {
         image: <IntroPage />,
         buttons: [
           <Button action="post" target={baseRoute}>
             Get Your Stats ↻
           </Button>,
-          <Button action="link" target="https://warpcast.com/horsefacts.eth/0x7d161970">
+          <Button
+            action="link"
+            target="https://warpcast.com/horsefacts.eth/0x7d161970"
+          >
             Go Yoink 🚩
           </Button>,
         ],
       };
-     }
-      fid = parseInt(ctx.searchParams.fid);
+    }
+    fid = parseInt(ctx.searchParams.fid);
   }
 
   const shareLink = "https://warpcast.com/~/compose?embeds[]=" +
