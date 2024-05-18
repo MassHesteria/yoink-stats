@@ -1,246 +1,50 @@
-import { IntroPage } from "./components/intro";
+import { Leaderboard } from "./components/leaderboard";
+import { NonePage } from "./components/none";
+import { RankPage } from "./components/rank";
+import { getUser, getUsers } from "./util";
 
-interface Flag {
-  yoinkedAt: number;
-  holderId: string;
-  holderName: string;
-  holderPlatform: string;
-}
+export const generateImage = async (fid: number) => {
+  const users = await getUsers();
+  const user = getUser(fid, users);
 
-export interface Stats {
-  flag: Flag;
-  yoinks: number;
-  userYoinks: { [key: string]: number };
-  userTimes: { [key: string]: number };
-  users: { [key: string]: string };
-}
-
-const getUsers = (stats: Stats) => {
-  return Object.keys(stats.users).map((userId) => {
-    const username = stats.users[userId];
-    const yoinks = stats.userYoinks[userId] || 0;
-    const times = stats.userTimes[userId] || 0;
-    return { userId, username, yoinks, times };
-  })
-}
-
-function formatTime(seconds: number) {
-  const days = Math.floor(seconds / (3600 * 24));
-  const hours = Math.floor((seconds % (3600 * 24)) / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-
-  const parts = [];
-
-  if (days > 0) {
-    parts.push(`${days}d`);
+  if (user == undefined) {
+    return <NonePage />;
   }
 
-  if (hours > 0) {
-    parts.push(`${hours}h`);
-  }
+  const { rank, yoinks, times, username } = user;
 
-  if (minutes > 0) {
-    parts.push(`${minutes}m`);
-  }
+  const getMilestone = (rank: number) => {
+    if (rank == 1) {
+      return { rank: 0, time: 0 };
+    } else if (rank > 500) {
+      return { rank: 500, time: users[499].times };
+    } else if (rank > 400) {
+      return { rank: 400, time: users[399].times };
+    } else if (rank > 300) {
+      return { rank: 300, time: users[299].times };
+    } else if (rank > 200) {
+      return { rank: 200, time: users[199].times };
+    } else if (rank > 100) {
+      return { rank: 100, time: users[99].times };
+    } else if (rank > 50) {
+      return { rank: 50, time: users[49].times };
+    }
+    return { rank: rank - 1, time: users[rank - 2].times };
+  };
 
-  if (remainingSeconds > 0) {
-    parts.push(`${remainingSeconds}s`);
-  }
-
-  return parts.join(' ');
-}
-
-const NonePage = ({ username }: { username: string }) => {
-  const nameSizeClass = username.length > 20 ? "text-7xl" : "text-8xl";
-  const displayName = username.length > 0 ? username : "(unknown)";
   return (
-    <div tw="flex h-full">
-      <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
-        <h2 tw="flex flex-col font-bold tracking-tight text-left">
-          <div tw="flex flex-col">
-            <div tw="flex flex-col justify-end">
-              <div tw={`flex ${nameSizeClass}`}>
-                <span tw="" style={{color: "#b16286"}}>{displayName}</span>
-              </div>
-            </div>
-            <div tw="flex flex-col text-right justify-end">
-              <div tw="flex text-7xl mb-1">
-                <span style={{color: "#8ec07c"}}>You have never Yoinked!</span>
-              </div>
-            </div>
-          </div>
-        </h2>
-      </div>
-      <span tw="absolute bottom-2 right-4">/yoink 🚩</span>
-    </div>
-  )
-}
-
-const RankPage = ({
-  username,
-  rank,
-  total,
-  yoinks,
-  time,
-  milestone,
-}: {
-  username: string;
-  rank: number;
-  total: number;
-  yoinks: number;
-  time: number;
-  milestone: { rank: number; time: number };
-}) => {
-  const nameSizeClass = username.length > 20 ? "text-7xl" : "text-8xl";
-  if (rank <= 0) {
-    return <NonePage username={username} />;
-  }
-  const statsLabelColor = "#8ec07c";
-  const statsValueColor = "#458588";
-  return (
-    <div tw="flex h-full">
-      <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
-        <h2 tw="flex flex-col font-bold tracking-tight text-left">
-          <div tw="flex flex-col">
-            <div tw="flex flex-col justify-end">
-              <div tw={`flex ${nameSizeClass}`}>
-                <span tw="" style={{ color: "#b16286" }}>
-                  {username}
-                </span>
-              </div>
-            </div>
-            <div tw="flex flex-col text-right justify-end">
-              <div tw="flex text-7xl mb-1">
-                <span tw="pr-4" style={{ color: "#928374" }}>
-                  Rank
-                </span>
-                <span tw="pr-4" style={{ color: "#fabd2f" }}>
-                  {rank}
-                </span>
-                <span tw="pr-4" style={{ color: "#928374" }}>
-                  of
-                </span>
-                <span tw="" style={{ color: "#fabd2f" }}>
-                  {total}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div tw="flex pl-1 pt-6 flex-wrap">
-            <div tw="flex pr-10">
-              <span tw="" style={{ color: statsLabelColor }}>
-                Yoinks
-              </span>
-              <span tw="pl-4" style={{ color: statsValueColor }}>
-                {yoinks}
-              </span>
-            </div>
-            <div tw="flex">
-              <span tw="" style={{ color: statsLabelColor }}>
-                Time Held
-              </span>
-              <span tw="pl-4" style={{ color: statsValueColor }}>
-                {formatTime(time)}
-              </span>
-            </div>
-          </div>
-          {milestone.rank > 0 && (
-            <div tw="flex flex-wrap pl-1">
-              <span tw="" style={{ color: statsLabelColor }}>
-                Next Milestone
-              </span>
-              <span tw="pl-4 pr-4" style={{ color: statsValueColor }}>
-                {milestone.rank % 100 == 0 || milestone.rank == 50
-                  ? `Top ${milestone.rank}`
-                  : `Rank ${milestone.rank}`}
-              </span>
-              <span tw="" style={{ color: statsLabelColor }}>
-                at
-              </span>
-              <span tw="pl-4" style={{ color: statsValueColor }}>
-                {formatTime(milestone.time)}
-              </span>
-            </div>
-          )}
-          <div tw="flex pl-1">
-            <span tw="" style={{ color: statsLabelColor }}>
-              Average Time Held
-            </span>
-            <span tw="pl-4" style={{ color: statsValueColor }}>
-              {formatTime(Math.floor(time / yoinks))}
-            </span>
-          </div>
-        </h2>
-      </div>
-      <span tw="absolute bottom-2 right-4">/yoink 🚩</span>
-    </div>
+    <RankPage
+      username={username}
+      rank={rank}
+      total={users.length}
+      yoinks={yoinks}
+      time={times}
+      milestone={getMilestone(rank)}
+    />
   );
 };
 
-export const generateImage = async (fid?: number) => {
-  let username = "";
-  let rank = 10000;
-  let total = 10000;
-  let yoinks = 12345678
-  let time = 1234567890;
-  let milestone = { rank: 0, time: 0 }
-  if (fid) {
-    let res = await fetch("https://yoink.terminally.online/api/stats");
-    const stats = await res.json();
-    const leaderboard = getUsers(stats).sort((a, b) => b.times - a.times);
-    rank = leaderboard.findIndex(p => p.userId == `farcaster:${fid}`)+1;
-    if (rank > 0) {
-      total = leaderboard.length;
-      const user = leaderboard[rank-1];
-      yoinks = user.yoinks;
-      time = user.times;
-      username = user.username;
-
-      if (rank > 1) {
-        if (rank > 500) {
-          milestone.rank = 500;
-          milestone.time = leaderboard[499].times
-        } else if (rank > 400) {
-          milestone.rank = 400;
-          milestone.time = leaderboard[399].times
-        } else if (rank > 300) {
-          milestone.rank = 300;
-          milestone.time = leaderboard[299].times
-        } else if (rank > 200) {
-          milestone.rank = 200;
-          milestone.time = leaderboard[199].times
-        } else if (rank > 100) {
-          milestone.rank = 100;
-          milestone.time = leaderboard[99].times
-        } else if (rank > 50) {
-          milestone.rank = 50;
-          milestone.time = leaderboard[49].times
-        } else {
-          milestone.rank = rank-1;
-          milestone.time = leaderboard[rank-2].times
-        }
-      }
-    }
-  }
-
-  return (
-    <div
-      tw="w-full h-full text-white justify-center items-center flex flex-col"
-      style={{ backgroundColor: "#282828" }}
-    >
-      {username ? (
-        <RankPage
-          username={username}
-          rank={rank}
-          total={total}
-          yoinks={yoinks}
-          time={time}
-          milestone={milestone}
-        />
-      ) : (
-        <IntroPage />
-      )}
-    </div>
-  );
-}
+export const generateLeaderboard = async (fid: number) => {
+  const users = await getUsers();
+  return <Leaderboard fid={fid} users={users} />;
+};
