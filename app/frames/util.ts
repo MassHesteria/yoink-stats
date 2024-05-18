@@ -69,7 +69,7 @@ export function formatTime(seconds: number) {
     parts.push(`${minutes}m`);
   }
 
-  if (days <= 0 && remainingSeconds > 0) {
+  if (days <= 0) {
     parts.push(`${remainingSeconds}s`);
   }
 
