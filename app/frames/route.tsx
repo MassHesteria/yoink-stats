@@ -2,12 +2,22 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
 import { getHostName } from "../data";
-import { generateImage } from "./generate";
+import { generateImage, generateLeaderboard } from "./generate";
+import { IntroPage } from "./components/intro";
+
 
 const handleRequest = frames(async (ctx) => {
   const timestamp = `${Date.now()}`
   const baseRoute = getHostName() + "/frames?ts=" + timestamp
+  const initFid = ctx.searchParams.fid
+  const leaderboard = ctx.searchParams.leaderboard || '0'
   
+  const getShareLink = (leaderboard: boolean) => {
+    const opts = leaderboard ? '&leaderboard=1' : ''
+    return "https://warpcast.com/~/compose?embeds[]=" +
+      encodeURIComponent(baseRoute + `&fid=${fid}${opts}`)
+  }
+
   if (ctx.message) {
     if (!ctx.message.isValid) {
       throw new Error('Could not validate request')
@@ -15,31 +25,60 @@ const handleRequest = frames(async (ctx) => {
   }
 
   let fid = ctx.message?.requesterFid;
-  let buttonTwo = {
-     link: "https://yoink.terminally.online",
-     text: "Full Leaderboard",
-  };
   if (fid == undefined) {
-     if (ctx.searchParams?.fid) {
-        fid = parseInt(ctx.searchParams.fid);
-     }
-  } else {
-     buttonTwo = {
-        link:
-           "https://warpcast.com/~/compose?embeds[]=" +
-           encodeURIComponent(baseRoute + `&fid=${fid}`),
-        text: "Share",
-     };
+    if (initFid == undefined) {
+      return {
+        image: <IntroPage />,
+        buttons: [
+          <Button action="post" target={baseRoute}>
+            Get Your Stats ↻
+          </Button>,
+          <Button
+            action="link"
+            target="https://warpcast.com/horsefacts.eth/0x7d161970"
+          >
+            Go Yoink 🚩
+          </Button>,
+        ],
+      };
+    }
+    fid = parseInt(initFid);
+  }
+
+  if (leaderboard == '1') {
+    return {
+      image: await generateLeaderboard(fid),
+      imageOptions: {
+        aspectRatio: '1:1'
+      },
+      buttons: [
+        <Button action="post" target={baseRoute + '&leaderboard=1'}>
+          Refresh ↻
+        </Button>,
+        <Button action="post" target={baseRoute}>
+          My Stats
+        </Button>,
+        <Button action="link" target={getShareLink(true)}>
+          Share
+        </Button>,
+        <Button action="link" target="https://warpcast.com/horsefacts.eth/0x7d161970">
+          Go Yoink 🚩
+        </Button>,
+      ],
+    }
   }
 
   return {
     image: await generateImage(fid),
     buttons: [
       <Button action="post" target={baseRoute}>
-        Get Your Stats ↻
+        Refresh ↻
       </Button>,
-      <Button action="link" target={buttonTwo.link}>
-        {buttonTwo.text}
+      <Button action="post" target={baseRoute + '&leaderboard=1'}>
+        Leaderboard
+      </Button>,
+      <Button action="link" target={getShareLink(false)}>
+        Share
       </Button>,
       <Button action="link" target="https://warpcast.com/horsefacts.eth/0x7d161970">
         Go Yoink 🚩
