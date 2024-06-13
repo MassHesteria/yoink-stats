@@ -2,12 +2,13 @@
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames } from "frames.js/next";
 import { Button } from "frames.js/next";
-import { getHostName, getHubRoute } from "../data";
+import { getHostName } from "../data";
  
 const frames = createFrames({
-  middleware: [farcasterHubContext({
-    hubHttpUrl: getHubRoute()
-  })]
+  middleware: [farcasterHubContext(
+    process.env['VERCEL_REGION'] ? {} : {
+    hubHttpUrl: 'http://localhost:3010/hub'
+  })],
 });
 
 const handleRequest = frames(async (ctx) => {
