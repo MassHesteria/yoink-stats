@@ -1,9 +1,9 @@
 import { farcasterHubContext } from "frames.js/middleware";
 import { createFrames } from "frames.js/next";
-import { getHubRoute } from "../data";
  
 export const frames = createFrames({
-  middleware: [farcasterHubContext({
-    hubHttpUrl: getHubRoute()
-  })]
+  middleware: [farcasterHubContext(
+    process.env['VERCEL_REGION'] ? {} : {
+    hubHttpUrl: 'http://localhost:3010/hub'
+  })],
 });
