@@ -40,7 +40,7 @@ export const Leaderboard = ({ fid, users}: {fid: number, users: User[]}) => {
                     <span style={{ width: '44%'}}>
                     {users[0].username}
                     </span>
-                    <span style={{ color: '#458588', width: '26%' }}>
+                    <span style={{ color: '#458588', width: '30%' }}>
                     {formatTime(users[0].times)}
                     </span>
                   </div>
@@ -51,7 +51,7 @@ export const Leaderboard = ({ fid, users}: {fid: number, users: User[]}) => {
                     <span style={{ width: '44%'}}>
                     {users[1].username}
                     </span>
-                    <span style={{ color: '#458588', width: '26%' }}>
+                    <span style={{ color: '#458588', width: '30%' }}>
                     {formatTime(users[1].times)}
                     </span>
                   </div>
@@ -62,7 +62,7 @@ export const Leaderboard = ({ fid, users}: {fid: number, users: User[]}) => {
                     <span style={{ width: '44%'}}>
                     {users[2].username}
                     </span>
-                    <span style={{ color: '#458588', width: '26%' }}>
+                    <span style={{ color: '#458588', width: '30%' }}>
                     {formatTime(users[2].times)}
                     </span>
                   </div>
@@ -85,7 +85,7 @@ export const Leaderboard = ({ fid, users}: {fid: number, users: User[]}) => {
                   <span tw="" style={{ color: nameColor, width: '44%' }}>
                   {u.username}
                   </span>
-                  <span tw="" style={{ color: timeColor, width: '26%' }}>
+                  <span tw="" style={{ color: timeColor, width: '30%' }}>
                   {formatTime(u.times)}
                   </span>
                 </div>
