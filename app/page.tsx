@@ -1,36 +1,30 @@
-import { fetchMetadata } from "frames.js/next";
 import { getHostName } from "./data";
+import { GET } from "./frames/route";
+import { NextRequest } from "next/server";
 
-type Props = {
-  params: { id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
-
-export async function generateMetadata({ searchParams }: Props) {
-  const routeUrl = new URL("/frames", getHostName())
-
-  for (let key in searchParams) {
-    let value = searchParams[key];
-    if (value !== undefined) {
-      if (Array.isArray(value)) {
-        value.forEach(val => routeUrl.searchParams.append(key, val));
-      } else {
-        routeUrl.searchParams.append(key, value);
-      }
-    }
+export async function generateMetadata() {
+  if (process.env['VERCEL_URL']) {
+    console.log('')
+    console.log('VERCEL_URL', process.env['VERCEL_URL'])
+    console.log('VERCEL_BRANCH_URL', process.env['VERCEL_BRANCH_URL'])
+    console.log('VERCEL_PROJECT_PRODUCTION_URL', process.env['VERCEL_PROJECT_PRODUCTION_URL'])
+    console.log('NEXT_PUBLIC_VERCEL_URL', process.env['NEXT_PUBLIC_VERCEL_URL'])
+    console.log('NEXT_PUBLIC_VERCEL_BRANCH_URL', process.env['NEXT_PUBLIC_VERCEL_BRANCH_URL'])
+    console.log('NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL', process.env['NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL'])
+    console.log('')
   }
-
-  const fidParam = searchParams.fid ? searchParams.fid + '/' : '';
-  const metaData = await fetchMetadata(routeUrl);
+  const framesRequest = new NextRequest(`${getHostName()}/frames`, {
+    headers: { Accept: "application/frames.js+metatags" },
+  });
+  const metadataResponse = await GET(framesRequest);
+  const metadata = await metadataResponse.json();
   return {
     title: "Yoink Stats",
     description: "Check your stats on Yoink",
-    metadataBase: new URL(getHostName()),
     openGraph: {
       title: "Yoink Stats",
-      images: [new URL(`/frames/${fidParam}opengraph-image`, getHostName())],
     },
-    other: metaData,
+    other: metadata,
   };
 }
  
