@@ -3,7 +3,6 @@ import { Button } from "frames.js/next";
 import { frames } from "./frames";
 import { getHostName } from "../data";
 import { generateImage, generateLeaderboard } from "./generate";
-import { IntroPage } from "./components/intro";
 
 
 const handleRequest = frames(async (ctx) => {
@@ -28,7 +27,7 @@ const handleRequest = frames(async (ctx) => {
   if (fid == undefined) {
     if (initFid == undefined) {
       return {
-        image: <IntroPage />,
+        image: "/intro",
         buttons: [
           <Button action="post" target={baseRoute}>
             Get Your Stats ↻
