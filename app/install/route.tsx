@@ -6,6 +6,7 @@ import { getHostName } from "../data";
  
 const frames = createFrames({
   basePath: '/install',
+  imagesRoute: '/',
   middleware: [farcasterHubContext(
     process.env['VERCEL_REGION'] ? {} : {
     hubHttpUrl: 'http://localhost:3010/hub'

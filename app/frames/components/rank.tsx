@@ -25,7 +25,7 @@ export const RankPage = ({
     >
       <div tw="flex h-full">
         <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
-          <h2 tw="flex flex-col font-bold tracking-tight text-left">
+          <h2 tw="flex flex-col font-bold text-left">
             <div tw="flex flex-col">
               <div tw="flex flex-col justify-end">
                 <div tw={`flex ${nameSizeClass}`}>
