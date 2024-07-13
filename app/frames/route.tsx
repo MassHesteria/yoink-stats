@@ -19,6 +19,7 @@ const handleRequest = frames(async (ctx) => {
     if (initFid == undefined) {
       return {
         image: "/intro",
+        title: "Yoink Stats",
         buttons: [
           <Button action="post">
             Get Your Stats ↻
@@ -38,6 +39,7 @@ const handleRequest = frames(async (ctx) => {
   if (leaderboard == '1') {
     return {
       image: await generateLeaderboard(fid),
+      title: 'Yoink Stats',
       imageOptions: {
         aspectRatio: '1:1'
       },
@@ -60,6 +62,7 @@ const handleRequest = frames(async (ctx) => {
 
   return {
     image: await generateImage(fid),
+    title: 'Yoink Stats',
     buttons: [
       <Button action="post">
         Refresh ↻

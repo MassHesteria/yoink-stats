@@ -5,6 +5,7 @@ import { Button } from "frames.js/next";
 import { getHostName } from "../data";
  
 const frames = createFrames({
+  basePath: '/install',
   middleware: [farcasterHubContext(
     process.env['VERCEL_REGION'] ? {} : {
     hubHttpUrl: 'http://localhost:3010/hub'
@@ -30,6 +31,7 @@ const handleRequest = frames(async (ctx) => {
         Install Yoink Stats Cast Action
       </Button>,
     ],
+    title: 'Install Yoink Stats Action'
   };
 });
 
