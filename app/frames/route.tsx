@@ -2,7 +2,14 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
 import { generateImage, generateLeaderboard } from "./generate";
-import { getShareLink } from "../data";
+import { getHostName, getShareLink } from "../data";
+
+const handleRequestOutro = frames(async (_) => {
+  return {
+    image: getHostName() + "/outro.png",
+    title: "Yoink Stats",
+  }
+})
 
 const handleRequest = frames(async (ctx) => {
   const initFid = ctx.searchParams.fid
@@ -80,5 +87,5 @@ const handleRequest = frames(async (ctx) => {
   };
 });
 
-export const GET = handleRequest;
-export const POST = handleRequest;
+export const GET = handleRequestOutro;
+export const POST = handleRequestOutro;

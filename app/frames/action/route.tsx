@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-key */
 import { NextRequest } from "next/server";
-import { frames } from "../frames";
+//import { frames } from "../frames";
 
 // https://warpcast.com/~/add-cast-action?url=https%3A%2F%2Fyoink-stats.vercel.app%2Fframes%2Faction
 
-type ActionResponse = {
+/*type ActionResponse = {
   name: string; // An action name up to 30 characters.
   icon: string; // An icon ID. See "Valid Icons"
   description: string; // A short description up to 80 characters.
@@ -14,7 +14,7 @@ type ActionResponse = {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(_: NextRequest) {
   const info: ActionResponse = {
     name: 'Yoink Stats',
     icon: 'list-ordered',
@@ -107,4 +107,8 @@ export async function POST(req: NextRequest) {
   await handleRequest(req)
 
   return Response.json({ message })
+}*/
+
+export async function POST(_: NextRequest) {
+  return Response.json({ message: 'Yoink Stats no longer available' })
 }
